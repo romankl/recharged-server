@@ -1,7 +1,7 @@
 CC ?= $(which clang)
 
 BUILDTYPE ?= Release
-BUILDFILE ?= src/main.c
+BUILDFILE ?= src/main.c src/error.c
 OUTFILE ?= reCharged
 
 UV_DIR ?= deps/uv
@@ -20,11 +20,3 @@ uv:
 	@cd $(UV_DIR); \
 		./gyp_uv.py -f make > /dev/null; \
 		BUILDTYPE=$(BUILDTYPE) CFLAGS=$(UV_CC_FLAGS) make -C out -j4
-
-clean:
-	@for i in `ls`; do \
-		if [ -x $$i ] && [ ! -d $$i ]; then \
-			rm $$i; \
-		fi; \
-	done
-	@rm -rf $(UV_DIR)/build
