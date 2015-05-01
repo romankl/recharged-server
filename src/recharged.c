@@ -1,16 +1,37 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "uv.h"
-#include "error.h"
+#include "recharged.h"
 
-// TCP TCP_SERVER_PORT for this server
 #define TCP_SERVER_PORT 5293
 
 typedef struct {
   uv_write_t request;
   uv_buf_t buf;
 } incoming_write_req_t;
+
+
+struct server_t sharedServer;
+
+
+static void initConfig() {
+    sharedServer.totalMemory = uv_get_total_memory();
+    sharedServer.startedTime = uv_hrtime();
+}
+
+
+static void serverStatus(incoming_write_req_t *incoming) {
+    char c[] = "ACTIVE";
+    incoming->buf = uv_buf_init(c, strlen(c));
+}
+
+
+static void parseData(incoming_write_req_t *incoming, const uv_buf_t* buf) {
+    char* content = buf->base;
+    if (strcmp(content, "STATUS") == 0) {
+        serverStatus(incoming);
+    }
+}
 
 
 static void uv_onCloseCallback(uv_handle_t* handle) {
@@ -30,14 +51,16 @@ static void uv_afterWriteCallback(uv_write_t* req, int status) {
     uv_close((uv_handle_t*)req->handle, uv_onCloseCallback);
 }
 
+
 static void uv_AfterShutdownCallback(uv_shutdown_t* req, int status) {
   uv_close((uv_handle_t*)req->handle, uv_onCloseCallback);
   free(req);
 }
 
+
 static void uv_onReadData(uv_stream_t* handle,
-                       ssize_t nread,
-                       const uv_buf_t* buf) {
+                          ssize_t nread,
+                          const uv_buf_t* buf) {
     int result;
     incoming_write_req_t* incoming;
     uv_shutdown_t* req;
@@ -52,15 +75,17 @@ static void uv_onReadData(uv_stream_t* handle,
         return;
     }
 
-    fprintf(stderr, "Content: %s\n", buf->base);
-
     incoming = (incoming_write_req_t*) malloc(sizeof(*incoming));
+    parseData(incoming, buf);
 
-    incoming->buf = uv_buf_init(buf->base, nread);
-
-    result = uv_write(&incoming->request, handle, &incoming->buf, 1, uv_afterWriteCallback);
+    result = uv_write(&incoming->request,
+                      handle,
+                      &incoming->buf,
+                      1,
+                      uv_afterWriteCallback);
     checkForError(result);
 }
+
 
 static void uv_allocationCallback(uv_handle_t* handle,
                     size_t suggested_size,
@@ -68,6 +93,7 @@ static void uv_allocationCallback(uv_handle_t* handle,
     buf->base = malloc(suggested_size);
     buf->len = suggested_size;
 }
+
 
 static void uv_setupServer(uv_stream_t* server, int status) {
     uv_tcp_t* stream;
@@ -80,15 +106,19 @@ static void uv_setupServer(uv_stream_t* server, int status) {
     result = uv_accept(server, (uv_stream_t*)stream);
     checkForError(result);
 
-    result = uv_read_start((uv_stream_t*)stream, uv_allocationCallback, uv_onReadData);
+    result = uv_read_start((uv_stream_t*)stream,
+                           uv_allocationCallback,
+                           uv_onReadData);
     checkForError(result);
 }
 
 
-static int setupServer() {
+static void setupServer() {
     struct sockaddr_in address;
     uv_tcp_t* tcpServer;
     int result;
+
+    initConfig();
 
     result = uv_ip4_addr("0.0.0.0", TCP_SERVER_PORT, &address);
     checkForError(result);
@@ -101,17 +131,17 @@ static int setupServer() {
     result = uv_tcp_bind(tcpServer, (const struct sockaddr*)&address, 0);
     checkForError(result);
 
-    result = uv_listen((uv_stream_t*)tcpServer, SOMAXCONN, uv_setupServer);
+    result = uv_listen((uv_stream_t*)tcpServer,
+                       SOMAXCONN,
+                       uv_setupServer);
     checkForError(result);
-
-    return 0;
 }
 
 
 int main() {
     int result;
-    result = setupServer();
-    checkForError(result);
+
+    setupServer();
 
     result = uv_run(uv_default_loop(), UV_RUN_DEFAULT);
     checkForError(result);

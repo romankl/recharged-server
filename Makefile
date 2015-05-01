@@ -1,7 +1,7 @@
 CC ?= $(which clang)
 
 BUILDTYPE ?= Release
-BUILDFILE ?= src/main.c src/error.c
+BUILDFILE ?= src/recharged.c src/error.c
 OUTFILE ?= reCharged
 
 UV_DIR ?= deps/uv
@@ -14,7 +14,8 @@ CFLAGS = -pthread -fno-omit-frame-pointer -Wall -g
 all:
 	$(CC) $(CFLAGS) -o $(OUTFILE) $(BUILDFILE) $(UV_BUILD_DIR)/libuv.a -I$(UV_INCLUDE_DIR)
 
-.PHONY: uv clean
+
+.PHONY: uv
 
 uv:
 	@cd $(UV_DIR); \
