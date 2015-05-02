@@ -14,9 +14,10 @@ typedef struct {
 struct server_t sharedServer;
 
 
-static void initConfig() {
+static void initSharedServer() {
     sharedServer.totalMemory = uv_get_total_memory();
     sharedServer.startedTime = uv_hrtime();
+    sharedServer.protocol = 1;
 }
 
 
@@ -28,14 +29,20 @@ static void serverStatus(incoming_write_req_t *incoming) {
 
 static void parseData(incoming_write_req_t *incoming, const uv_buf_t* buf) {
     char* content = buf->base;
-    if (strcmp(content, "STATUS") == 0) {
-        serverStatus(incoming);
+    char* token = strtok(content, "\r\n");
+
+    if (strlen(content) > 0) {
+        if (token[0] == 'S') {
+            if (strcmp(content, "STATUS") == 0) {
+                serverStatus(incoming);
+            }
+        }
     }
 }
 
 
 static void uv_onCloseCallback(uv_handle_t* handle) {
-  free(handle);
+    free(handle);
 }
 
 
@@ -53,8 +60,8 @@ static void uv_afterWriteCallback(uv_write_t* req, int status) {
 
 
 static void uv_AfterShutdownCallback(uv_shutdown_t* req, int status) {
-  uv_close((uv_handle_t*)req->handle, uv_onCloseCallback);
-  free(req);
+    uv_close((uv_handle_t*)req->handle, uv_onCloseCallback);
+    free(req);
 }
 
 
@@ -118,7 +125,7 @@ static void setupServer() {
     uv_tcp_t* tcpServer;
     int result;
 
-    initConfig();
+    initSharedServer();
 
     result = uv_ip4_addr("0.0.0.0", TCP_SERVER_PORT, &address);
     checkForError(result);
@@ -138,8 +145,10 @@ static void setupServer() {
 }
 
 
-int main() {
+int main(int argc, char** argv) {
     int result;
+
+    uv_setup_args(argc, argv);
 
     setupServer();
 

@@ -4,7 +4,7 @@ var client = new net.Socket();
 client.connect(5293, '127.0.0.1', function() {
 	console.log('Connected to server');
 	console.log('Sending: STATUS');
-	client.write('STATUS');
+	client.write('STATUS\r\n');
 });
 
 client.on('data', function(data) {
