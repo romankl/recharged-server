@@ -1,7 +1,7 @@
 CC ?= $(which clang)
 
 BUILDTYPE ?= Release
-BUILDFILE ?= src/recharged.c src/error.c src/queue.c
+BUILDFILE ?= src/recharged.c src/error.c src/queue.c src/list.c
 OUTFILE ?= reCharged
 
 UV_DIR ?= deps/uv

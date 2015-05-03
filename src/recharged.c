@@ -5,14 +5,6 @@
 
 #define TCP_SERVER_PORT 5293
 
-typedef struct {
-  uv_write_t request;
-  uv_buf_t buf;
-} incoming_write_req_t;
-
-
-struct server_t sharedServer;
-
 
 static void initSharedServer() {
     sharedServer.totalMemory = uv_get_total_memory();
@@ -35,6 +27,14 @@ static void parseData(incoming_write_req_t *incoming, const uv_buf_t* buf) {
         if (token[0] == 'S') {
             if (strcmp(content, "STATUS") == 0) {
                 serverStatus(incoming);
+            }
+        } else if (token[0] == 'C') {
+            if (strcmp(content, "CREATEQUEUE") == 0) {
+
+            }
+        } else if (token[0] == 'Q') {
+            if (strcmp(content, "QADDMSG") == 0) {
+
             }
         }
     }
