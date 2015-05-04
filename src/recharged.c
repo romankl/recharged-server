@@ -49,10 +49,6 @@ static void uv_onCloseCallback(uv_handle_t* handle) {
 static void uv_afterWriteCallback(uv_write_t* req, int status) {
     incoming_write_req_t* incoming = (incoming_write_req_t*)req;
 
-    if (incoming->buf.base != NULL) {
-        free(incoming->buf.base);
-    }
-
     free(incoming);
 
     uv_close((uv_handle_t*)req->handle, uv_onCloseCallback);
