@@ -2,7 +2,7 @@
 
 queue_message_t* iterate(queue_t* queue);
 
-queue_t* create(incoming_write_req_t *incoming, char* name) {
+queue_t* createQueue(incoming_write_req_t *incoming, char* name) {
     size_t size = name == NULL ? 0 : strlen(name);
     queue_t* queue = malloc(size + sizeof(queue_t));
     queue->name = name;

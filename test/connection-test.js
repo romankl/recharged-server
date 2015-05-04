@@ -1,17 +1,27 @@
-var net = require('net');
+const net = require('net');
+const client = new net.Socket();
+const assert = require('assert')
 
-var client = new net.Socket();
-client.connect(5293, '127.0.0.1', function() {
-	console.log('Connected to server');
-	console.log('Sending: STATUS');
-	client.write('STATUS\r\n');
-});
+describe('Connection test:', function(){
+  describe('STATUS', function(){
+    it('should return OK when STATUS is used', function(done){
 
-client.on('data', function(data) {
-	console.log('Received: ' + data);
-	client.destroy();
-});
+		client.connect(5293, '127.0.0.1', function() {
+			console.log('Connected to server');
+			console.log('Sending: STATUS');
+			client.write('STATUS\r\n');
+		});
 
-client.on('close', function() {
-	console.log('Connection closed');
-});
+		client.on('data', function(data) {
+			console.log('Received: ' + data);
+			assert(data == 'OK')
+			client.destroy();
+		});
+
+		client.on('close', function() {
+			console.log('Connection closed');
+			done();
+		});
+    })
+  })
+})

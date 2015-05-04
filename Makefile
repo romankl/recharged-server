@@ -14,8 +14,10 @@ CFLAGS = -pthread -fno-omit-frame-pointer -Wall -g
 all:
 	$(CC) $(CFLAGS) -o $(OUTFILE) $(BUILDFILE) $(UV_BUILD_DIR)/libuv.a -I$(UV_INCLUDE_DIR)
 
+test:
+	./node_modules/mocha/bin/mocha --reporter spec test/*-test.js
 
-.PHONY: uv
+.PHONY: uv test
 
 uv:
 	@cd $(UV_DIR); \
