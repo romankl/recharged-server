@@ -1,7 +1,7 @@
 CC ?= $(which clang)
 
 BUILDTYPE ?= Release
-BUILDFILE ?= src/recharged.c src/error.c src/queue.c src/list.c
+BUILDFILE ?= src/recharged.cc
 OUTFILE ?= reCharged
 
 UV_DIR ?= deps/uv
@@ -12,7 +12,7 @@ UV_INCLUDE_DIR = $(UV_DIR)/include
 CFLAGS = -pthread -fno-omit-frame-pointer -Wall -g
 
 all:
-	$(CC) $(CFLAGS) -o $(OUTFILE) $(BUILDFILE) $(UV_BUILD_DIR)/libuv.a -I$(UV_INCLUDE_DIR)
+	g++ $(CFLAGS) -o $(OUTFILE) $(BUILDFILE) $(UV_BUILD_DIR)/libuv.a -I$(UV_INCLUDE_DIR)
 
 test:
 	./node_modules/mocha/bin/mocha --reporter spec test/*-test.js
