@@ -7,13 +7,7 @@ namespace internal {
 
   class Ast {
     public:
-      enum AstType {
-        kAstTypeError, // -
-        kAstTypeBlukArray, // $
-        kAstTypeSimpleString, // +
-        kAstTypeInteger,  // :
-        kAstTypeArray // *
-      };
+
       int type;
     private:
       long count;

@@ -1,9 +1,15 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <iostream>
+#include <string.h>
 
 #include "uv.h"
+#include "parser.h"
 
 #define TCP_SERVER_PORT 5293
+
+using namespace std;
+using namespace recharged::internal;
 
 typedef struct {
   uv_write_t request;
@@ -127,8 +133,36 @@ static void setupServer() {
 }
 
 
+static void replParser() {
+  string input;
+  Parser parser = Parser();
+  while(1) {
+    cin >> input;
+    if (input.length() > 0) {
+      parser.SetInput(input);
+      parser.Parse();
+    }
+  }
+}
+
+
+static void setupArgs(int argc, char** argv) {
+  for (int i = 0; i < argc; i++) {
+
+    // Eval mode to get a "repl like" parser
+    if (strcmp(argv[i], "-e") == 0) {
+      replParser();
+    }
+  }
+}
+
+
 int main(int argc, char** argv) {
   int result;
+
+  if (argc > 0) {
+    setupArgs(argc, argv);
+  }
 
   uv_setup_args(argc, argv);
 

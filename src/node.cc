@@ -3,6 +3,6 @@
 
 namespace recharged {
 namespace internal {
-  
+
 }  // internal
 }  // recharged
