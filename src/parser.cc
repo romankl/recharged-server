@@ -1,5 +1,7 @@
 #include "parser.h"
 
+using namespace std;
+
 namespace recharged {
 namespace internal {
 
@@ -15,7 +17,7 @@ void Parser::SetInput(const char* input) {
 }
 
 
-void Parser::SetInput(std::string input) {
+void Parser::SetInput(string input) {
   this->input = input.c_str();
   UpdateLength();
 }
@@ -51,13 +53,13 @@ void Parser::SetParserError() {
 
 
 void Parser::ParseInteger(Ast *ast, int start) {
-  std::string token = this->ParseSingleProtocolToken(start);
+  string token = this->ParseSingleProtocolToken(start);
   // TODO: to Int conversion
-  std::cout << "Parsed Integer: " << token << std::endl;
+  cout << "Parsed Integer: " << token << endl;
 }
 
 
-std::string Parser::ParseSingleProtocolToken(int start) {
+string Parser::ParseSingleProtocolToken(int start) {
   int i = 0;
   for (i = start; i < this->length; i++) {
     // End of the string: +OK\r\n (4 tokens left till the end of the end input)
@@ -68,21 +70,21 @@ std::string Parser::ParseSingleProtocolToken(int start) {
       break;
   }
 
-  std::string token(input);
+  string token(input);
   token = token.substr(1, this->length - 2);
   return token;
 }
 
 
 void Parser::ParseSimpleString(Ast* ast, int start) {
-  std::string token = this->ParseSingleProtocolToken(start);
-  std::cout << "Parsed SimpleString: " << token << std::endl;
+  string token = this->ParseSingleProtocolToken(start);
+  cout << "Parsed SimpleString: " << token << endl;
 }
 
 
 void Parser::ParseError(Ast *ast, int start) {
-  std::string token = this->ParseSingleProtocolToken(start);
-  std::cout << "Parsed Error: " << token << std::endl;
+  string token = this->ParseSingleProtocolToken(start);
+  cout << "Parsed Error: " << token << endl;
 }
 
 
