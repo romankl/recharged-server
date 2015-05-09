@@ -30,11 +30,14 @@ namespace internal {
     long length;
     int inputProtocolType;
 
-    Error* error;
     int EvaluteHeader(Ast *ast);
     int ParseProtocolTypeToken(char token);
+    std::string ParseSingleProtocolToken(int start);
     void ParseSimpleString(Ast* ast, int start);
+    void ParseInteger(Ast *ast, int start);
+    void ParseError(Ast *ast, int start);
     void UpdateLength();
+    void SetParserError();
   };
 }  // internal
 }  // recharged

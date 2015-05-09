@@ -31,16 +31,33 @@ Ast* Parser::Parse() {
   int inputType = EvaluteHeader(ast);
 
   if (inputType == -1)
+    this->SetParserError();
     return NULL;
 
-  if (inputType == Protocol::kProtocolTypeSimpleString) {
-    ParseSimpleString(ast, 1);
-    fprintf(stderr, "");
-  }
+  if (inputType == Protocol::kProtocolTypeSimpleString)
+    this->ParseSimpleString(ast, 1);
+  else if (inputType == Protocol::kProtocolTypeInteger)
+    this->ParseInteger(ast, 1);
+  else if (inputType == Protocol::kProtocolTypeError)
+    this->ParseError(ast, 1);
+  else
+    this->SetParserError();
 }
 
 
-void Parser::ParseSimpleString(Ast* ast, int start) {
+void Parser::SetParserError() {
+  Error(0, "Coud not parse expression");
+}
+
+
+void Parser::ParseInteger(Ast *ast, int start) {
+  std::string token = this->ParseSingleProtocolToken(start);
+  // TODO: to Int conversion
+  std::cout << "Parsed Integer: " << token << std::endl;
+}
+
+
+std::string Parser::ParseSingleProtocolToken(int start) {
   int i = 0;
   for (i = start; i < this->length; i++) {
     // End of the string: +OK\r\n (4 tokens left till the end of the end input)
@@ -53,8 +70,19 @@ void Parser::ParseSimpleString(Ast* ast, int start) {
 
   std::string token(input);
   token = token.substr(1, this->length - 2);
+  return token;
+}
 
-  std::cout << "Parsed: " << token << std::endl;
+
+void Parser::ParseSimpleString(Ast* ast, int start) {
+  std::string token = this->ParseSingleProtocolToken(start);
+  std::cout << "Parsed SimpleString: " << token << std::endl;
+}
+
+
+void Parser::ParseError(Ast *ast, int start) {
+  std::string token = this->ParseSingleProtocolToken(start);
+  std::cout << "Parsed Error: " << token << std::endl;
 }
 
 
