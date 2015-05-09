@@ -137,7 +137,10 @@ static void replParser() {
   string input;
   Parser parser = Parser();
   while(1) {
+    cout << ">";
     cin >> input;
+    input = input.substr(0, input.length());
+    input += "\r\n";
     if (input.length() > 0) {
       parser.SetInput(input);
       parser.Parse();

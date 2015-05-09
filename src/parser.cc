@@ -41,22 +41,20 @@ Ast* Parser::Parse() {
 
 
 void Parser::ParseSimpleString(Ast* ast, int start) {
-  std::string token;
-
-  for (int i = start; i < this->length; i++) {
+  int i = 0;
+  for (i = start; i < this->length; i++) {
     // End of the string: +OK\r\n (4 tokens left till the end of the end input)
-    if (i == (this->length - 4))
+    if ((i - 1) == (this->length - 4))
       break;
 
     if ((this->input[i] == '\r') && ((this->input[i + 1] == '\n')))
       break;
-
-    std::string dummy(input[i], 1);
-
-    token += dummy;
   }
 
-  std::cout << token;
+  std::string token(input);
+  token = token.substr(1, this->length - 2);
+
+  std::cout << "Parsed: " << token << std::endl;
 }
 
 
