@@ -107,7 +107,7 @@ int Parser::ParseProtocolTypeToken(char token) {
 int Parser::EvaluteHeader(Ast* ast) {
   const char headerToken = this->input[0];
   int resolvedToken = this->ParseProtocolTypeToken(headerToken);
-  ast->type = resolvedToken;
+  ast->SetType(resolvedToken);
 
   if (resolvedToken < 0)
     return -1;
