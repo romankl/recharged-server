@@ -11,7 +11,7 @@ namespace internal {
   public:
     enum ProtocolType {
       kProtocolTypeError, // -
-      kProtocolTypeBlukArray, // $
+      kProtocolTypeBlukString, // $
       kProtocolTypeSimpleString, // +
       kProtocolTypeInteger,  // :
       kProtocolTypeArray // *
@@ -19,7 +19,7 @@ namespace internal {
 
     enum ProtocolSign {
       kProtocolSignError = '-',
-      kProtocolSignBulkArray = '$',
+      kProtocolSignBulkString = '$',
       kProtocolSignSimpleString = '+',
       kProtocolSignInteger = ':',
       kProtocolSignArray = '*'

@@ -93,8 +93,8 @@ int Parser::ParseProtocolTypeToken(char token) {
       return Protocol::kProtocolTypeArray;
     else if (token == Protocol::kProtocolSignError)
       return Protocol::kProtocolTypeError;
-    else if (token == Protocol::kProtocolSignBulkArray)
-      return Protocol::kProtocolTypeBlukArray;
+    else if (token == Protocol::kProtocolSignBulkString)
+      return Protocol::kProtocolTypeBlukString;
     else if (token == Protocol::kProtocolSignInteger)
       return Protocol::kProtocolTypeInteger;
     else if (token == Protocol::kProtocolSignSimpleString)
