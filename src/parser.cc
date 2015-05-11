@@ -32,18 +32,37 @@ Ast* Parser::Parse() {
   Ast* ast = new Ast();
   int inputType = EvaluteHeader(ast);
 
-  if (inputType == -1)
+  if (inputType == -1) {
     this->SetParserError();
     return NULL;
+  }
 
+  this->ParserTree(ast, inputType);
+}
+
+
+void Parser::ParserTree(Ast* ast, int inputType) {
   if (inputType == Protocol::kProtocolTypeSimpleString)
     this->ParseSimpleString(ast, 1);
   else if (inputType == Protocol::kProtocolTypeInteger)
     this->ParseInteger(ast, 1);
   else if (inputType == Protocol::kProtocolTypeError)
     this->ParseError(ast, 1);
+  else if (inputType == Protocol::kProtocolTypeArray)
+    this->ParserArray(ast);
   else
     this->SetParserError();
+}
+
+
+void Parser::ParserArray(Ast* ast) {
+  // The number of elements in the array is always provided at the 2nd position
+  int elements = this->input[1];
+  int protocolHeader = -1;
+  for (int i = 1; i <= elements; i++) {
+    protocolHeader = this->ParseProtocolTypeToken(input[this->currentPos] + 2);
+    this->ParserTree(ast, protocolHeader);
+  }
 }
 
 
@@ -69,6 +88,8 @@ string Parser::ParseSingleProtocolToken(int start) {
     if ((this->input[i] == '\r') && ((this->input[i + 1] == '\n')))
       break;
   }
+
+  this->currentPos = i;
 
   string token(input);
   token = token.substr(1, this->length - 2);
@@ -104,15 +125,21 @@ int Parser::ParseProtocolTypeToken(char token) {
 }
 
 
-int Parser::EvaluteHeader(Ast* ast) {
-  const char headerToken = this->input[0];
+int Parser::EvaluteHeader(Ast* ast, int pos) {
+  const char headerToken = this->input[pos];
   int resolvedToken = this->ParseProtocolTypeToken(headerToken);
   ast->SetType(resolvedToken);
 
   if (resolvedToken < 0)
     return -1;
 
+  this->currentPos = 1;
   return resolvedToken;
+}
+
+
+int Parser::EvaluteHeader(Ast* ast) {
+  return this->EvaluteHeader(ast, 0);
 }
 }  // namespace internal
 }  // namespace recharged

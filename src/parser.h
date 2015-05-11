@@ -29,8 +29,10 @@ namespace internal {
     const char* input;
     long length;
     int inputProtocolType;
+    int currentPos;
 
     int EvaluteHeader(Ast *ast);
+    int EvaluteHeader(Ast *ast, int pos);
     int ParseProtocolTypeToken(char token);
     std::string ParseSingleProtocolToken(int start);
     void ParseSimpleString(Ast* ast, int start);
@@ -38,6 +40,8 @@ namespace internal {
     void ParseError(Ast *ast, int start);
     void UpdateLength();
     void SetParserError();
+    void ParserArray(Ast* ast);
+    void ParserTree(Ast* ast, int inputType);
   };
 }  // internal
 }  // recharged
