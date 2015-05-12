@@ -42,6 +42,7 @@ namespace internal {
     void SetParserError();
     void ParserArray(Ast* ast);
     void ParserTree(Ast* ast, int inputType);
+    void ParserTree(Ast* ast, int inputType, int pos);
   };
 }  // internal
 }  // recharged

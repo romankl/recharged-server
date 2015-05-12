@@ -42,12 +42,17 @@ Ast* Parser::Parse() {
 
 
 void Parser::ParserTree(Ast* ast, int inputType) {
+  this->ParserTree(ast, inputType, 1);
+}
+
+
+void Parser::ParserTree(Ast* ast, int inputType, int pos) {
   if (inputType == Protocol::kProtocolTypeSimpleString)
-    this->ParseSimpleString(ast, 1);
+    this->ParseSimpleString(ast, pos);
   else if (inputType == Protocol::kProtocolTypeInteger)
-    this->ParseInteger(ast, 1);
+    this->ParseInteger(ast, pos);
   else if (inputType == Protocol::kProtocolTypeError)
-    this->ParseError(ast, 1);
+    this->ParseError(ast, pos);
   else if (inputType == Protocol::kProtocolTypeArray)
     this->ParserArray(ast);
   else
@@ -57,11 +62,12 @@ void Parser::ParserTree(Ast* ast, int inputType) {
 
 void Parser::ParserArray(Ast* ast) {
   // The number of elements in the array is always provided at the 2nd position
-  int elements = this->input[1];
+  int elements = this->input[1] - '0';
   int protocolHeader = -1;
+  this->currentPos = 2;
   for (int i = 1; i <= elements; i++) {
-    protocolHeader = this->ParseProtocolTypeToken(input[this->currentPos] + 2);
-    this->ParserTree(ast, protocolHeader);
+    protocolHeader = this->ParseProtocolTypeToken(input[this->currentPos + 2]);
+    this->ParserTree(ast, protocolHeader, this->currentPos+4);
   }
 }
 
@@ -92,8 +98,8 @@ string Parser::ParseSingleProtocolToken(int start) {
   this->currentPos = i;
 
   string token(input);
-  token = token.substr(1, this->length - 2);
-  return token;
+  string found = token.substr(start, i - start);
+  return found;
 }
 
 
