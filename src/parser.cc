@@ -37,6 +37,7 @@ Ast* Parser::Parse() {
     return NULL;
   }
 
+  ast->SetType(inputType);
   this->ParserTree(ast, inputType);
 }
 
@@ -84,6 +85,8 @@ void Parser::ParseInteger(Ast *ast, int start) {
   string token = this->ParseSingleProtocolToken(start);
   // TODO: to Int conversion
   cout << "Parsed Integer: " << token << endl;
+  Node* node = new Node(Protocol::kProtocolTypeInteger, token);
+  ast->AddNext(node);
 }
 
 
@@ -114,12 +117,16 @@ string Parser::ParseSingleProtocolToken(int start) {
 void Parser::ParseSimpleString(Ast* ast, int start) {
   string token = this->ParseSingleProtocolToken(start);
   cout << "Parsed SimpleString: " << token << endl;
+  Node* node = new Node(Protocol::kProtocolTypeSimpleString, token);
+  ast->AddNext(node);
 }
 
 
 void Parser::ParseError(Ast *ast, int start) {
   string token = this->ParseSingleProtocolToken(start);
   cout << "Parsed Error: " << token << endl;
+  Node* node = new Node(Protocol::kProtocolTypeError, token);
+  ast->AddNext(node);
 }
 
 

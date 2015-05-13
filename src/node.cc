@@ -3,10 +3,12 @@
 
 namespace recharged {
 namespace internal {
-Node::Node(std::string data, int type) {
+
+Node::Node(int type, std::string data) {
   this->data = data;
   this->type = type;
 }
+
 
 
 void Node::SetNext(Node* next) {
@@ -17,5 +19,6 @@ void Node::SetNext(Node* next) {
 Node* Node::GetNext() {
   return this->next;
 }
+
 }  // internal
 }  // recharged

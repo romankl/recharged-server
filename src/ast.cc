@@ -4,7 +4,7 @@ namespace recharged {
 namespace internal {
 
 Ast::Ast() {
-  this->first = NULL;
+  this->first = nullptr;
 }
 
 
@@ -28,6 +28,18 @@ void Ast::SetType(int type) {
 
 int Ast::GetType() {
   return this->type;
+}
+
+
+void Ast::AddNext(Node* next) {
+  if (this->first == nullptr) {
+    this->first = next;
+    this->last = next;
+    return;
+  }
+
+  Node* last = this->last;
+  last->SetNext(next);
 }
 
 

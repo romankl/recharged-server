@@ -8,7 +8,7 @@ namespace internal {
 
   class Node {
     public:
-      Node(std::string data, int type);
+      Node(int type, std::string data);
       void SetNext(Node* next);
       Node* GetNext();
 
