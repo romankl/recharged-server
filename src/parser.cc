@@ -62,12 +62,15 @@ void Parser::ParserTree(Ast* ast, int inputType, int pos) {
 
 void Parser::ParserArray(Ast* ast) {
   // The number of elements in the array is always provided at the 2nd position
-  int elements = this->input[1] - '0';
+  int elements = stoi(this->ParseSingleProtocolToken(1));
   int protocolHeader = -1;
-  this->currentPos = 2;
   for (int i = 1; i <= elements; i++) {
-    protocolHeader = this->ParseProtocolTypeToken(input[this->currentPos + 2]);
-    this->ParserTree(ast, protocolHeader, this->currentPos+4);
+    // Set the position after the \r\n token. It will be the next header token
+    this->currentPos = this->currentPos + 2;
+    protocolHeader = this->ParseProtocolTypeToken(input[this->currentPos]);
+    // The next position is the "real" data
+    this->currentPos++;
+    this->ParserTree(ast, protocolHeader, this->currentPos);
   }
 }
 
@@ -98,7 +101,12 @@ string Parser::ParseSingleProtocolToken(int start) {
   this->currentPos = i;
 
   string token(input);
-  string found = token.substr(start, i - start);
+  string found;
+  if (i == start) {
+    found = token.at(i);
+  } else {
+    found = token.substr(start, i - start);
+ }
   return found;
 }
 

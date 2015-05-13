@@ -142,7 +142,7 @@ static void replParser() {
     input = input.substr(0, input.length());
     input += "\r\n";
     if (input.length() > 0) {
-      parser.SetInput("*3\r\n:1\r\n:2\r\n:3\r\n");
+      parser.SetInput(input);
       parser.Parse();
     }
   }
