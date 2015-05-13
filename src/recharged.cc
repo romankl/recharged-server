@@ -5,10 +5,13 @@
 
 #include "uv.h"
 #include "parser.h"
+#include "jsapi.h"
+
 
 #define TCP_SERVER_PORT 5293
 
 using namespace std;
+using namespace JS;
 using namespace recharged::internal;
 
 typedef struct {
@@ -162,7 +165,7 @@ static void setupArgs(int argc, char** argv) {
 
 int main(int argc, char** argv) {
   int result;
-
+  JSRuntime *rt;
   if (argc > 0) {
     setupArgs(argc, argv);
   }
