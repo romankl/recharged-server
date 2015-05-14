@@ -12,7 +12,7 @@ UV_CC_FLAGS = -fno-omit-frame-pointer
 UV_INCLUDE_DIR = $(UV_DIR)/include
 
 
-JS_DIR ?= deps/js
+JS_DIR ?= deps/monkey/js
 JS_BUILD_DIR = $(JS_DIR)/src/build_OPT.OBJ
 JS_CC_FLAGS = -fno-omit-frame-pointer
 
