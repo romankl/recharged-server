@@ -5,47 +5,18 @@
 
 #include "uv.h"
 #include "parser.h"
-#include "jsapi.h"
+#include "runtime.h"
 
 
 #define TCP_SERVER_PORT 5293
 
 using namespace std;
-using namespace JS;
 using namespace recharged::internal;
 
 typedef struct {
   uv_write_t request;
   uv_buf_t buf;
 } incoming_write_req_t;
-
-
-static void serverStatus(incoming_write_req_t *incoming) {
-  char c[] = "ACTIVE";
-  incoming->buf = uv_buf_init(c, strlen(c));
-}
-
-
-static void parseData(incoming_write_req_t *incoming, const uv_buf_t* buf) {
-  char* content = buf->base;
-  char* token = strtok(content, "\r\n");
-
-  if (strlen(content) > 0) {
-      if (token[0] == 'S') {
-          if (strcmp(content, "STATUS") == 0) {
-              serverStatus(incoming);
-          }
-      } else if (token[0] == 'C') {
-          if (strcmp(content, "CREATEQUEUE") == 0) {
-
-          }
-      } else if (token[0] == 'Q') {
-          if (strcmp(content, "QADDMSG") == 0) {
-
-          }
-      }
-  }
-}
 
 
 static void uv_onCloseCallback(uv_handle_t* handle) {
@@ -84,7 +55,12 @@ static void uv_onReadData(uv_stream_t* handle,
   }
 
   incoming = (incoming_write_req_t*) malloc(sizeof(*incoming));
-  parseData(incoming, buf);
+
+  Runtime* runtime = new Runtime();
+  string response = runtime->Run(buf->base);
+
+
+  incoming->buf = uv_buf_init((char *)response.c_str(), response.length());
 
   result = uv_write(&incoming->request,
                     handle,
@@ -165,7 +141,7 @@ static void setupArgs(int argc, char** argv) {
 
 int main(int argc, char** argv) {
   int result;
-  JSRuntime *rt;
+
   if (argc > 0) {
     setupArgs(argc, argv);
   }

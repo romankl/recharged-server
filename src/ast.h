@@ -12,6 +12,7 @@ namespace internal {
     public:
       Ast();
       Ast(Node* first);
+
       void SetFirst(Node *);
       Node* GetFirst();
       void SetType(int type);

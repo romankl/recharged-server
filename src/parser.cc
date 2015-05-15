@@ -39,6 +39,8 @@ Ast* Parser::Parse() {
 
   ast->SetType(inputType);
   this->ParserTree(ast, inputType);
+
+  return ast;
 }
 
 
