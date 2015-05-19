@@ -2,7 +2,8 @@ CC ?= $(which clang)
 
 BUILDTYPE ?= Release
 BUILDFILE ?= src/recharged.cc src/parser.cc src/ast.cc src/astnode.cc \
-             src/node.cc src/error.cc src/runtime.cc
+             src/node.cc src/error.cc src/runtime.cc src/jsruntime.cc \
+             src/server.cc
 OUTFILE ?= reCharged
 
 UV_DIR ?= deps/uv

@@ -1,5 +1,5 @@
-#ifndef _SRC_Ast_H_
-#define _SRC_Ast_H_
+#ifndef _SRC_AST_H_
+#define _SRC_AST_H_
 
 #include <stdlib.h>
 #include "node.h"

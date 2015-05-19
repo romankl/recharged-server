@@ -56,9 +56,14 @@ static void uv_onReadData(uv_stream_t* handle,
 
   incoming = (incoming_write_req_t*) malloc(sizeof(*incoming));
 
-  Runtime* runtime = new Runtime();
-  string response = runtime->Run(buf->base);
+  // Depending on the used RESP protocol header choose a different runtime
+  string response;
+  if (buf->base[0] == '%') {
 
+  } else {
+    Runtime* runtime = new Runtime();
+    response = runtime->Run(buf->base);
+  }
 
   incoming->buf = uv_buf_init((char *)response.c_str(), response.length());
 
