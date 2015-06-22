@@ -21,6 +21,10 @@ std::string Runtime::Run(char *input) {
   Parser* parser = new Parser(input);
   Ast* ast =  parser->Parse();
 
+  if (ast == nullptr) {
+    return "+Error while execution";
+  }
+
   Node* node = ast->GetFirst();
   if (node == nullptr)
     return "";

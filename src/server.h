@@ -7,13 +7,6 @@
 namespace recharged {
 namespace internal {
   class Server {
-    public:
-      static Server* sharedServer();
-
-      private:
-        Server() {};
-
-        static Server* sharedInstance;
   };
 }  // internal
 }  // recharged

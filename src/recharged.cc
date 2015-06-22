@@ -25,15 +25,15 @@ static void uv_onCloseCallback(uv_handle_t* handle) {
 
 
 static void uv_afterWriteCallback(uv_write_t* req, int status) {
-  incoming_write_req_t* incoming = (incoming_write_req_t*)req;
+  incoming_write_req_t* incoming = reinterpret_cast<incoming_write_req_t*>(req);
   free(incoming);
 
-  uv_close((uv_handle_t*)req->handle, uv_onCloseCallback);
+  uv_close(reinterpret_cast<uv_handle_t*>(req->handle), uv_onCloseCallback);
 }
 
 
 static void uv_AfterShutdownCallback(uv_shutdown_t* req, int status) {
-  uv_close((uv_handle_t*)req->handle, uv_onCloseCallback);
+  uv_close(reinterpret_cast<uv_handle_t*>(req->handle), uv_onCloseCallback);
   free(req);
 }
 
@@ -49,12 +49,12 @@ static void uv_onReadData(uv_stream_t* handle,
    free(buf->base);
 
   if (nread < 0) {
-      req = (uv_shutdown_t*) malloc(sizeof(*req));
+      req = reinterpret_cast<uv_shutdown_t*>(malloc(sizeof(&req)));
       result = uv_shutdown(req, handle, uv_AfterShutdownCallback);
       return;
   }
 
-  incoming = (incoming_write_req_t*) malloc(sizeof(*incoming));
+  incoming = reinterpret_cast<incoming_write_req_t*>(malloc(sizeof(*incoming)));
 
   // Depending on the used RESP protocol header choose a different runtime
   string response;
@@ -65,7 +65,7 @@ static void uv_onReadData(uv_stream_t* handle,
     response = runtime->Run(buf->base);
   }
 
-  incoming->buf = uv_buf_init((char *)response.c_str(), response.length());
+  incoming->buf = uv_buf_init(const_cast<char*>(response.c_str()), response.length());
 
   result = uv_write(&incoming->request,
                     handle,
@@ -78,7 +78,7 @@ static void uv_onReadData(uv_stream_t* handle,
 static void uv_allocationCallback(uv_handle_t* handle,
                                   size_t suggested_size,
                                   uv_buf_t* buf) {
-  buf->base = (char *) malloc(suggested_size);
+  buf->base = reinterpret_cast<char*>(malloc(suggested_size));
   buf->len = suggested_size;
 }
 
@@ -86,13 +86,13 @@ static void uv_allocationCallback(uv_handle_t* handle,
 static void uv_setupServer(uv_stream_t* server, int status) {
   uv_tcp_t* stream;
   int result;
-  stream = (uv_tcp_t*) malloc(sizeof(uv_tcp_t));
+  stream = reinterpret_cast<uv_tcp_t*>(malloc(sizeof(uv_tcp_t)));
   result = uv_tcp_init(uv_default_loop(), stream);
 
   stream->data = server;
-  result = uv_accept(server, (uv_stream_t*)stream);
+  result = uv_accept(server, reinterpret_cast<uv_stream_t*>(stream));
 
-  result = uv_read_start((uv_stream_t*)stream,
+  result = uv_read_start(reinterpret_cast<uv_stream_t*>(stream),
                          uv_allocationCallback,
                          uv_onReadData);
 }
@@ -105,13 +105,13 @@ static void setupServer() {
 
   result = uv_ip4_addr("0.0.0.0", TCP_SERVER_PORT, &address);
 
-  tcpServer = (uv_tcp_t*) malloc(sizeof(*tcpServer));
+  tcpServer = reinterpret_cast<uv_tcp_t*>(malloc(sizeof(*tcpServer)));
 
   result = uv_tcp_init(uv_default_loop(), tcpServer);
 
   result = uv_tcp_bind(tcpServer, (const struct sockaddr*)&address, 0);
 
-  result = uv_listen((uv_stream_t*)tcpServer,
+  result = uv_listen(reinterpret_cast<uv_stream_t*>(tcpServer),
                      SOMAXCONN,
                      uv_setupServer);
 }
