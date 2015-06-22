@@ -18,7 +18,7 @@ JS_BUILD_DIR = $(JS_DIR)/src/build_OPT.OBJ
 JS_CC_FLAGS = -fno-omit-frame-pointer
 
 JS_INCLUDE_DIR = $(JS_BUILD_DIR)/dist/include
-CFLAGS = -pthread -fno-omit-frame-pointer -Wall -g
+CFLAGS = -pthread -fno-omit-frame-pointer -Wall -g -std=c++11
 
 all:
 	clang++ $(CFLAGS) $(BUILDFILE) $(JS_BUILD_DIR)/libjs_static.a $(UV_BUILD_DIR)/libuv.a -I$(UV_INCLUDE_DIR) -I$(JS_INCLUDE_DIR)
