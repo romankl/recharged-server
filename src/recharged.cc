@@ -6,12 +6,16 @@
 #include "uv.h"
 #include "parser.h"
 #include "runtime.h"
+#include "server.h"
 
 
 #define TCP_SERVER_PORT 5293
 
+
 using namespace std;
 using namespace recharged::internal;
+
+Server server;
 
 typedef struct {
   uv_write_t request;
@@ -100,18 +104,18 @@ static void uv_setupServer(uv_stream_t* server, int status) {
 
 static void setupServer() {
   struct sockaddr_in address;
-  uv_tcp_t* tcpServer;
   int result;
 
   result = uv_ip4_addr("0.0.0.0", TCP_SERVER_PORT, &address);
 
-  tcpServer = reinterpret_cast<uv_tcp_t*>(malloc(sizeof(*tcpServer)));
+  server.tcpLoop = reinterpret_cast<uv_tcp_t*>(
+                        malloc(sizeof(*server.tcpLoop)));
 
-  result = uv_tcp_init(uv_default_loop(), tcpServer);
+  result = uv_tcp_init(uv_default_loop(), server.tcpLoop);
 
-  result = uv_tcp_bind(tcpServer, (const struct sockaddr*)&address, 0);
+  result = uv_tcp_bind(server.tcpLoop, (const struct sockaddr*)&address, 0);
 
-  result = uv_listen(reinterpret_cast<uv_stream_t*>(tcpServer),
+  result = uv_listen(reinterpret_cast<uv_stream_t*>(server.tcpLoop),
                      SOMAXCONN,
                      uv_setupServer);
 }
