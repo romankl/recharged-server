@@ -7,11 +7,12 @@
 #include "parser.h"
 #include "runtime.h"
 #include "server.h"
+#include "jsapi.h"
 
 
 #define TCP_SERVER_PORT 5293
 
-
+using namespace JS;
 using namespace std;
 using namespace recharged::internal;
 
@@ -105,6 +106,13 @@ static void uv_setupServer(uv_stream_t* server, int status) {
 static void setupServer() {
   struct sockaddr_in address;
   int result;
+  double uptime = 0;
+
+
+  server.uptime = uv_hrtime();
+  uv_uptime(&uptime);
+  server.systemUptime = uptime;
+  server.totalMemory = uv_get_total_memory();
 
   result = uv_ip4_addr("0.0.0.0", TCP_SERVER_PORT, &address);
 

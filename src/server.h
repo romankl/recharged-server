@@ -18,8 +18,11 @@ namespace internal {
 
       uv_tcp_t* tcpLoop;
 
-      int port;
-
+      unsigned int port;
+      int pid;
+      unsigned int systemUptime;
+      unsigned int uptime;
+      uint64_t totalMemory;
   };
 }  // internal
 }  // recharged

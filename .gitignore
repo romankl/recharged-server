@@ -3,3 +3,4 @@ reCharged.dSYM
 a.out
 a.out.dSYM/
 deps/monkey/js/src/build_OPT.OBJ
+*.gch
