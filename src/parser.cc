@@ -70,10 +70,10 @@ void Parser::ParserArray(Ast* ast) {
   for (int i = 1; i <= elements; i++) {
     // Set the position after the \r\n token. It will be the next header token
     this->currentPos = this->currentPos + 2;
-    protocolHeader = this->ParseProtocolTypeToken(input[this->currentPos]);
+    protocolHeader = this->ParseProtocolTypeToken(input[this->currentPos + 2]);
     // The next position is the "real" data
-    this->currentPos++;
-    this->ParserTree(ast, protocolHeader, this->currentPos);
+    this->currentPos += 2;
+    this->ParserTree(ast, protocolHeader, this->currentPos + 1);
   }
 }
 
@@ -96,10 +96,10 @@ string Parser::ParseSingleProtocolToken(int start) {
   int i = 0;
   for (i = start; i < this->length; i++) {
     // End of the string: +OK\r\n (4 tokens left till the end of the end input)
-    if ((i - 1) == (this->length - 4))
+    if (i + 1 == this->length)
       break;
 
-    if ((this->input[i] == '\r') && ((this->input[i + 1] == '\n')))
+    if ((this->input[i] == '\\') && ((this->input[i + 1] == 'r')))
       break;
   }
 

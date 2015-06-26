@@ -147,8 +147,10 @@ static void setupArgs(int argc, char** argv) {
   for (int i = 0; i < argc; i++) {
 
     // Eval mode to get a "repl like" parser
-    if (strcmp(argv[i], "-e") == 0) {
+    if (!strcmp(argv[i], "-e")) {
       replParser();
+    } else if (!strcmp(argv[i], "-p")) {
+      server.port = atoi(argv[i+1]);
     }
   }
 }
