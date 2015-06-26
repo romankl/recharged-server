@@ -2,7 +2,6 @@
 #define _SRC_JSRUNTIME_H_
 
 #include <stdlib.h>
-#include "jsapi.h"
 
 
 namespace recharged {

@@ -7,12 +7,10 @@
 #include "parser.h"
 #include "runtime.h"
 #include "server.h"
-#include "jsapi.h"
 
 
 #define TCP_SERVER_PORT 5293
 
-using namespace JS;
 using namespace std;
 using namespace recharged::internal;
 

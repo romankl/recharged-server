@@ -1,0 +1,3 @@
+#!/bin/sh
+
+cd `dirname $0` && ./tools/gyp/gyp --depth=$PWD -f make $* recharged.gyp
