@@ -14,8 +14,6 @@
 using namespace std;
 using namespace recharged::internal;
 
-Server server;
-
 typedef struct {
   uv_write_t request;
   uv_buf_t buf;
@@ -106,24 +104,28 @@ static void setupServer() {
   int result;
   double uptime = 0;
 
+  Server::GetInstance();
 
-  server.uptime = uv_hrtime();
+  Server::GetInstance().uptime = uv_hrtime();
   uv_uptime(&uptime);
-  server.systemUptime = uptime;
-  server.totalMemory = uv_get_total_memory();
+  Server::GetInstance().systemUptime = uptime;
+  Server::GetInstance().totalMemory = uv_get_total_memory();
 
   result = uv_ip4_addr("0.0.0.0", TCP_SERVER_PORT, &address);
 
-  server.tcpLoop = reinterpret_cast<uv_tcp_t*>(
-                        malloc(sizeof(*server.tcpLoop)));
+  Server::GetInstance().tcpLoop = reinterpret_cast<uv_tcp_t*>(
+                                    malloc(
+                                      sizeof(*Server::GetInstance().tcpLoop)));
 
-  result = uv_tcp_init(uv_default_loop(), server.tcpLoop);
+  result = uv_tcp_init(uv_default_loop(), Server::GetInstance().tcpLoop);
 
-  result = uv_tcp_bind(server.tcpLoop, (const struct sockaddr*)&address, 0);
+  result = uv_tcp_bind(Server::GetInstance().tcpLoop, (
+                       const struct sockaddr*)&address, 0);
 
-  result = uv_listen(reinterpret_cast<uv_stream_t*>(server.tcpLoop),
-                     SOMAXCONN,
-                     uv_setupServer);
+  result = uv_listen(
+             reinterpret_cast<uv_stream_t*>(Server::GetInstance().tcpLoop),
+                                            SOMAXCONN,
+                                            uv_setupServer);
 }
 
 
@@ -150,7 +152,7 @@ static void setupArgs(int argc, char** argv) {
     if (!strcmp(argv[i], "-e")) {
       replParser();
     } else if (!strcmp(argv[i], "-p")) {
-      server.port = atoi(argv[i+1]);
+      Server::GetInstance().port = atoi(argv[i+1]);
     }
   }
 }

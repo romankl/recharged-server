@@ -12,7 +12,6 @@
     ],
     "sources": [
       "src/ast.cc",
-      "src/astnode.cc",
       "src/error.cc",
       "src/jsruntime.cc",
       "src/node.cc",
@@ -21,7 +20,6 @@
       "src/recharged.cc",
       # Header files
       "src/ast.h",
-      "src/astnode.h",
       "src/error.h",
       "src/jsruntime.h",
       "src/node.h",

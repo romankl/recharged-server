@@ -32,6 +32,7 @@ int Ast::GetType() {
 
 
 void Ast::AddNext(Node* next) {
+  this->count++;
   if (this->first == nullptr) {
     this->first = next;
     this->last = next;
