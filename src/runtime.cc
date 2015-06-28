@@ -30,7 +30,7 @@ std::string Runtime::Run(char *input) {
     return "";
 
   while (node != nullptr) {
-
+    std::string cmd = node->GetData();
 
     node = node->GetNext();
   }

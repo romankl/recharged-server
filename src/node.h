@@ -12,6 +12,9 @@ namespace internal {
       void SetNext(Node* next);
       Node* GetNext();
 
+      std::string GetData();
+      int GetType();
+
       enum NodeType {
         kCommandNode,
         kDataNode

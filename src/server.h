@@ -5,6 +5,7 @@
 #include <string>
 
 #include "uv.h"
+#include "commandtable.h"
 
 
 namespace recharged {
@@ -25,6 +26,7 @@ class Server
         unsigned int systemUptime;
         unsigned int uptime;
         uint64_t totalMemory;
+        CommandTable cmdMap;
 
     private:
         Server() {};

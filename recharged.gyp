@@ -18,6 +18,7 @@
       "src/parser.cc",
       "src/runtime.cc",
       "src/recharged.cc",
+      "src/commandtable.cc",
       # Header files
       "src/ast.h",
       "src/error.h",
@@ -27,6 +28,7 @@
       "src/protocol.h",
       "src/runtime.h",
       "src/server.h",
+      "src/commandtable.h",
     ],
     "conditions": [
       ["OS == 'linux'", {

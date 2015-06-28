@@ -10,7 +10,6 @@ Node::Node(int type, std::string data) {
 }
 
 
-
 void Node::SetNext(Node* next) {
   this->next = next;
 }
@@ -18,6 +17,16 @@ void Node::SetNext(Node* next) {
 
 Node* Node::GetNext() {
   return this->next;
+}
+
+
+std::string Node::GetData() {
+  return this->data;
+}
+
+
+int Node::GetType() {
+  return this->type;
 }
 
 }  // internal
