@@ -102,13 +102,11 @@ static void uv_setupServer(uv_stream_t* server, int status) {
 static void setupServer() {
   struct sockaddr_in address;
   int result;
-  double uptime = 0;
 
-  Server::GetInstance();
+  Server::GetInstance().cmdMap = new Mapping();
+  Server::GetInstance().queues = new Mapping();
 
-  Server::GetInstance().uptime = uv_hrtime();
-  uv_uptime(&uptime);
-  Server::GetInstance().systemUptime = uptime;
+  Server::GetInstance().startedTime = uv_hrtime();
   Server::GetInstance().totalMemory = uv_get_total_memory();
 
   result = uv_ip4_addr("0.0.0.0", TCP_SERVER_PORT, &address);

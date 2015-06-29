@@ -5,7 +5,7 @@
 #include <string>
 
 #include "uv.h"
-#include "commandtable.h"
+#include "mapping.h"
 
 
 namespace recharged {
@@ -23,10 +23,10 @@ class Server
 
         unsigned int port;
         int pid;
-        unsigned int systemUptime;
-        unsigned int uptime;
+        unsigned int startedTime;
         uint64_t totalMemory;
-        CommandTable cmdMap;
+        Mapping* cmdMap;
+        Mapping* queues;
 
     private:
         Server() {};
