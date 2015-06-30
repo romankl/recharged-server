@@ -20,7 +20,6 @@
       "src/recharged.cc",
       "src/mapping.cc",
       "src/queue.cc",
-      "src/queue-header.cc",
       # Header files
       "src/ast.h",
       "src/error.h",
@@ -31,7 +30,6 @@
       "src/runtime.h",
       "src/server.h",
       "src/mapping.h",
-      "src/queue-header.h",
       "src/queue.h",
     ],
     "conditions": [
