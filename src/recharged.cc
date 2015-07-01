@@ -7,6 +7,7 @@
 #include "parser.h"
 #include "runtime.h"
 #include "server.h"
+#include "queue.h"
 
 
 #define TCP_SERVER_PORT 5293
@@ -103,8 +104,14 @@ static void setupServer() {
   struct sockaddr_in address;
   int result;
 
+  // Create the hashmaps for commands as well as queues
   Server::GetInstance().cmdMap = new Mapping();
   Server::GetInstance().queues = new Mapping();
+
+  typedef void (*function)(Ast*, uv_buf_t*);
+  function ptrQcreateCmd = Queue::QueueCreateCommand;
+
+  Server::GetInstance().queues->Add("QCREATE", &ptrQcreateCmd);
 
   Server::GetInstance().startedTime = uv_hrtime();
   Server::GetInstance().totalMemory = uv_get_total_memory();
