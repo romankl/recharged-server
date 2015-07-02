@@ -3,12 +3,13 @@
 namespace recharged {
 namespace internal {
 
-void Mapping::Add(const std::string key, void* cmd) {
+template <class T>
+T Mapping<T>::Add(const std::string key, T cmd) {
   mapped[key] = cmd;
 }
 
-
-void* Mapping::Get(const std::string key) {
+template <class T>
+T Mapping<T>::Get(const std::string key) {
   return mapped[key];
 }
 

@@ -6,6 +6,7 @@
 
 #include "uv.h"
 #include "mapping.h"
+#include "queue.h"
 
 
 namespace recharged {
@@ -19,14 +20,16 @@ class Server
             return instance;
         }
 
+        typedef int (&commandFunction)(Ast*, uv_buf_t*);
+
         uv_tcp_t* tcpLoop;
 
         unsigned int port;
         int pid;
         unsigned int startedTime;
         uint64_t totalMemory;
-        Mapping* cmdMap;
-        Mapping* queues;
+        Mapping<commandFunction>* cmdMap;
+        Mapping<Queue*>* queues;
 
     private:
         Server() {};

@@ -21,7 +21,6 @@ class QueueElement {
     std::string msg;
     std::string id;
     std::string origin;
-    Mapping* payload;
 };
 
 class Queue
@@ -41,7 +40,7 @@ class Queue
     QueueElement* GetNextElement();
 
     // Queue related commands
-    static void QueueCreateCommand(Ast* ast, uv_buf_t* buf);
+    static int QueueCreateCommand(Ast* ast, uv_buf_t* buf);
 
   private:
     std::string id;

@@ -105,13 +105,10 @@ static void setupServer() {
   int result;
 
   // Create the hashmaps for commands as well as queues
-  Server::GetInstance().cmdMap = new Mapping();
-  Server::GetInstance().queues = new Mapping();
+  Server::GetInstance().cmdMap = new Mapping<>();
+  Server::GetInstance().queues = new Mapping<Queue*>();
 
-  typedef void (*function)(Ast*, uv_buf_t*);
-  function ptrQcreateCmd = Queue::QueueCreateCommand;
-
-  Server::GetInstance().queues->Add("QCREATE", &ptrQcreateCmd);
+  Server::GetInstance().cmdMap->Add("QCREATE", *Queue::QueueCreateCommand);
 
   Server::GetInstance().startedTime = uv_hrtime();
   Server::GetInstance().totalMemory = uv_get_total_memory();

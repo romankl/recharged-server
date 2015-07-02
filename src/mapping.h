@@ -8,11 +8,12 @@
 namespace recharged {
 namespace internal {
 
+  template <class T>
   class Mapping {
 
     public:
-      void Add(const std::string key, void* cmd);
-      void* Get(const std::string key);
+      T Add(const std::string key, T cmd);
+      T Get(const std::string key);
     private:
       std::unordered_map<std::string, void*> mapped;
     };
