@@ -154,7 +154,11 @@ static void setupArgs(int argc, char** argv) {
     if (!strcmp(argv[i], "-e")) {
       replParser();
     } else if (!strcmp(argv[i], "-p")) {
-      Server::GetInstance().port = atoi(argv[i+1]);
+      if (argc + 1 <= arc) {
+        Server::GetInstance().port = atoi(argv[i+1]);
+      } else {
+        Server::GetInstance().port = TCP_SERVER_PORT;
+      }
     }
   }
 }
