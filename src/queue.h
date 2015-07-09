@@ -40,7 +40,7 @@ class Queue
     QueueElement* GetNextElement();
 
     // Queue related commands
-    static int QueueCreateCommand(Ast* ast, uv_buf_t* buf);
+    static void QueueCreateCommand(Ast* ast, uv_buf_t* buf);
 
   private:
     std::string id;

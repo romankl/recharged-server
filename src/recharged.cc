@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <iostream>
 #include <string.h>
+#include <functional>
 
 #include "uv.h"
 #include "parser.h"
@@ -67,7 +67,8 @@ static void uv_onReadData(uv_stream_t* handle,
     response = runtime->Run(buf->base);
   }
 
-  incoming->buf = uv_buf_init(const_cast<char*>(response.c_str()), response.length());
+  incoming->buf = uv_buf_init(const_cast<char*>(response.c_str()),
+                                                response.length());
 
   result = uv_write(&incoming->request,
                     handle,
@@ -105,10 +106,8 @@ static void setupServer() {
   int result;
 
   // Create the hashmaps for commands as well as queues
-  Server::GetInstance().cmdMap = new Mapping<>();
+  Server::GetInstance().cmdMap = new Mapping<std::function<void (Request*)>>();
   Server::GetInstance().queues = new Mapping<Queue*>();
-
-  Server::GetInstance().cmdMap->Add("QCREATE", *Queue::QueueCreateCommand);
 
   Server::GetInstance().startedTime = uv_hrtime();
   Server::GetInstance().totalMemory = uv_get_total_memory();
@@ -154,7 +153,7 @@ static void setupArgs(int argc, char** argv) {
     if (!strcmp(argv[i], "-e")) {
       replParser();
     } else if (!strcmp(argv[i], "-p")) {
-      if (argc + 1 <= arc) {
+      if (argc + 1 <= argc) {
         Server::GetInstance().port = atoi(argv[i+1]);
       } else {
         Server::GetInstance().port = TCP_SERVER_PORT;

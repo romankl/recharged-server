@@ -20,6 +20,7 @@
       "src/recharged.cc",
       "src/mapping.cc",
       "src/queue.cc",
+      "src/request.cc",
       # Header files
       "src/ast.h",
       "src/error.h",
@@ -31,6 +32,7 @@
       "src/server.h",
       "src/mapping.h",
       "src/queue.h",
+      "src/request.h",
     ],
     "conditions": [
       ["OS == 'linux'", {

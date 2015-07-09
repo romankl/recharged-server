@@ -55,7 +55,7 @@ QueueElement* Queue::GetNextElement() {
 }
 
 
-int Queue::QueueCreateCommand(Ast* ast, uv_buf_t* buf) {
+void Queue::QueueCreateCommand(Ast* ast, uv_buf_t* buf) {
   int i = 0;
   i++;
   i = i;

@@ -3,10 +3,12 @@
 
 #include <stdlib.h>
 #include <string>
+#include <functional>
 
 #include "uv.h"
 #include "mapping.h"
 #include "queue.h"
+#include "request.h"
 
 
 namespace recharged {
@@ -28,7 +30,7 @@ class Server
         int pid;
         unsigned int startedTime;
         uint64_t totalMemory;
-        Mapping<commandFunction>* cmdMap;
+        Mapping<std::function<void(Request)>>* cmdMap;
         Mapping<Queue*>* queues;
 
     private:
