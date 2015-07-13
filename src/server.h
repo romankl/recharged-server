@@ -4,11 +4,13 @@
 #include <stdlib.h>
 #include <string>
 #include <functional>
+#include <unordered_map>
+
 
 #include "uv.h"
 #include "mapping.h"
 #include "queue.h"
-#include "request.h"
+#include "ast.h"
 
 
 namespace recharged {
@@ -30,7 +32,7 @@ class Server
         int pid;
         unsigned int startedTime;
         uint64_t totalMemory;
-        Mapping<std::function<void(Request)>>* cmdMap;
+        Mapping<std::function<std::string(Ast*, uv_buf_t*)> >* cmdMap;
         Mapping<Queue*>* queues;
 
     private:

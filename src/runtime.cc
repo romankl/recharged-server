@@ -32,6 +32,10 @@ std::string Runtime::Run(char *input) {
   while (node != nullptr) {
     std::string cmd = node->GetData();
 
+    // Server::GetInstance().cmdMap->mapped[cmd](ast);
+
+
+
     node = node->GetNext();
   }
 

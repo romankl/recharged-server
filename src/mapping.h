@@ -14,8 +14,9 @@ namespace internal {
     public:
       T Add(const std::string key, T cmd);
       T Get(const std::string key);
+      std::unordered_map<std::string, T> mapped;
+
     private:
-      std::unordered_map<std::string, void*> mapped;
     };
 
 }  // internal

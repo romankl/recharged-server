@@ -38,10 +38,6 @@ class Queue
     void DecrementCount();
 
     QueueElement* GetNextElement();
-
-    // Queue related commands
-    static void QueueCreateCommand(Ast* ast, uv_buf_t* buf);
-
   private:
     std::string id;
     std::string name;
@@ -49,6 +45,10 @@ class Queue
 
     QueueElement* next;
 };
+
+namespace QueueCommands {
+  std::string QueueCreateCommand(Ast* ast, uv_buf_t* buf);
+}
 
 }  // internal
 }  // recharged

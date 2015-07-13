@@ -106,8 +106,13 @@ static void setupServer() {
   int result;
 
   // Create the hashmaps for commands as well as queues
-  Server::GetInstance().cmdMap = new Mapping<std::function<void (Request*)>>();
   Server::GetInstance().queues = new Mapping<Queue*>();
+
+  Server::GetInstance().cmdMap =
+    new Mapping<std::function<std::string(Ast*, uv_buf_t*)> >();
+
+  Server::GetInstance().cmdMap->mapped["QCREATE"] =
+    &QueueCommands::QueueCreateCommand;
 
   Server::GetInstance().startedTime = uv_hrtime();
   Server::GetInstance().totalMemory = uv_get_total_memory();
