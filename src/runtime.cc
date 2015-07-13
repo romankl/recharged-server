@@ -1,4 +1,5 @@
 #include "runtime.h"
+#include "server.h"
 
 namespace recharged {
 namespace internal {
@@ -32,7 +33,7 @@ std::string Runtime::Run(char *input) {
   while (node != nullptr) {
     std::string cmd = node->GetData();
 
-    // Server::GetInstance().cmdMap->mapped[cmd](ast);
+    Server::GetInstance().cmdMap->mapped[cmd](ast, nullptr);
 
 
 

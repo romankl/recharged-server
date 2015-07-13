@@ -56,9 +56,7 @@ QueueElement* Queue::GetNextElement() {
 
 
 std::string QueueCommands::QueueCreateCommand(Ast* ast, uv_buf_t* buf) {
-  int i = 0;
-  i++;
-  i = i;
+  return "";
 }
 
 

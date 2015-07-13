@@ -9,12 +9,14 @@
 
 #include "uv.h"
 #include "mapping.h"
-#include "queue.h"
 #include "ast.h"
 
 
 namespace recharged {
 namespace internal {
+
+// Forward declaration to avoid circles.
+class Queue;
 
 class Server
 {
@@ -23,8 +25,6 @@ class Server
             static Server instance;
             return instance;
         }
-
-        typedef int (&commandFunction)(Ast*, uv_buf_t*);
 
         uv_tcp_t* tcpLoop;
 

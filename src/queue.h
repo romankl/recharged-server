@@ -7,6 +7,8 @@
 #include "mapping.h"
 #include "ast.h"
 #include "uv.h"
+#include "server.h"
+
 
 namespace recharged {
 namespace internal {
